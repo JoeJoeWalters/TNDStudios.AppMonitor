@@ -1,0 +1,67 @@
+﻿@page
+<div class="row">
+    <div class="col-5" style="border-right: 3px solid #cccccc">
+        <table style="width: 100%" class="table table-sm table-borderless">
+            <colgroup>
+                <col width="50%" />
+                <col width="25%" />
+                <col width="25%" />
+            </colgroup>
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">Application Name</th>
+                    <th class="text-center">Errors</th>
+                    <th class="text-center">Metrics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-bind:class="{ 'border-danger': application.errors.length != 0 }" v-for="application in sortedApplicationArray"
+                    style="padding-bottom: 5px">
+                    <td>
+                        <button type="button" style="width:100%" class="btn btn-sm"
+                                v-bind:class="{ 'btn-danger': application.errors.length != 0, 'btn-success': application.errors.length == 0}">
+                            <span v-bind:class="{ 'text-white': application.errors.length != 0 }">{{application.title}}</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" style="width:100%" class="btn btn-sm"
+                                v-bind:class="{ 'btn-danger': application.errors.length != 0, 'btn-outline-primary': application.errors.length == 0}">
+                            Errors <span class="badge badge-light">{{application.errors.length}}</span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" style="width:100%" class="btn btn-sm"
+                                v-bind:class="{ 'btn-primary': application.metrics.length != 0, 'btn-outline-primary': application.errors.length == 0}">
+                            Metrics <span class="badge badge-light">{{application.metrics.length}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-7">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="chart-container">
+                        <canvas id="chartDisplay1"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="chart-container">
+                        <canvas id="chartDisplay2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/lib/chart.js/Chart.bundle.min.js"></script>
+    <script src="~/js/notify/notify.min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/js/telemetryModel.js" asp-append-version="true"></script>
+    <script src="~/js/telemetryPage.js" asp-append-version="true"></script>
+}
