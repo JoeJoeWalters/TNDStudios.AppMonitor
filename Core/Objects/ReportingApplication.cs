@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TNDStudios.SignalR.Telemetry.Objects
+namespace TNDStudios.AppMonitor.Core.Objects
 {
     [JsonObject]
     public class ReportingApplication : ReportingObjectBase

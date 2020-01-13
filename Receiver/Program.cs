@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace TNDStudios.SignalR.Telemetry
+namespace TNDStudios.AppMonitor.Service
 {
     public class Program
     {

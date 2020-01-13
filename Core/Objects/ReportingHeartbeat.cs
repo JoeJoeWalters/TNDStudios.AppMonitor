@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace TNDStudios.SignalR.Telemetry.Objects
+namespace TNDStudios.AppMonitor.Core.Objects
 {
     [JsonObject]
     public class ReportingHeartbeat : ReportingObjectBase

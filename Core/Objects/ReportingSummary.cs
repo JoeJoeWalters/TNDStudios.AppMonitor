@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TNDStudios.SignalR.Telemetry.Objects
+namespace TNDStudios.AppMonitor.Core.Objects
 {
     /// <summary>
     /// Summary of what has been happening since the last time the services was 

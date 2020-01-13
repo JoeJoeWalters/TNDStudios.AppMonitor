@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace TNDStudios.SignalR.Telemetry.Objects
+namespace TNDStudios.AppMonitor.Core.Objects
 {
     /// <summary>
     /// Base class to define that all objects have an Id and a "received" date and time
