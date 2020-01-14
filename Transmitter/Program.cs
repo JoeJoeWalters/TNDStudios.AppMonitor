@@ -34,12 +34,12 @@ namespace Transmitter
                 Double randomVal = (new Random()).NextDouble();
 
                 if (randomVal < 0.1)
-                    monitorClient.Heartbeat();
+                    monitorClient.SendHeartbeat();
 
                 if (randomVal > 0.9)
-                    monitorClient.Error("Shit went sideways!");
+                    monitorClient.SendError("Shit went sideways!");
 
-                monitorClient.Send("Record", (Int32)(randomVal * 100));
+                monitorClient.SendMetric("Record", (Int32)(randomVal * 100));
                 Thread.Sleep((Int32)((new Random()).NextDouble() * 2000));
             }
         }
