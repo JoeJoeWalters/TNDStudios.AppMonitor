@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace TNDStudios.AppMonitor.Client
 {
-    public class PlugIn
+    public class MonitorClient
     {
         private HubConnection connection;
         private String applicationName;
 
-        public PlugIn(String applicationName, String uri)
+        public MonitorClient(String applicationName, String uri)
         {
             this.applicationName = applicationName;
             connection = new HubConnectionBuilder()
                 .WithUrl(new Uri(uri))
-                .WithAutomaticReconnect(new TelemetryRetryPolicy())
+                .WithAutomaticReconnect(new MonitorClientRetryPolicy())
                 .Build();
         }
 
@@ -108,25 +108,4 @@ namespace TNDStudios.AppMonitor.Client
             return true;
         }
     }
-
-    public class TelemetryRetryPolicy : IRetryPolicy
-    {
-        private readonly Random _random = new Random();
-
-        public TimeSpan? NextRetryDelay(RetryContext retryContext)
-        {
-            // If we've been reconnecting for less than 60 seconds so far,
-            // wait between 0 and 10 seconds before the next reconnect attempt.
-            if (retryContext.ElapsedTime < TimeSpan.FromSeconds(60))
-            {
-                return TimeSpan.FromSeconds(_random.Next() * 10);
-            }
-            else
-            {
-                // If we've been reconnecting for more than 60 seconds so far, stop reconnecting.
-                return null;
-            }
-        }
-    }
-
 }
