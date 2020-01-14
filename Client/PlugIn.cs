@@ -3,14 +3,14 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Transmitter
+namespace TNDStudios.AppMonitor.Client
 {
-    public class TelemetryHandler
+    public class PlugIn
     {
         private HubConnection connection;
         private String applicationName;
 
-        public TelemetryHandler(String applicationName, String uri)
+        public PlugIn(String applicationName, String uri)
         {
             this.applicationName = applicationName;
             connection = new HubConnectionBuilder()
