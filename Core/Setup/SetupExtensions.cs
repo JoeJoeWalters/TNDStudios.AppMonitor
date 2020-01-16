@@ -1,21 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    public interface IAppMonitorCore
-    {
-
-    }
-
-    public class AppMonitorCore : IAppMonitorCore
-    {
-
-    }
-
     public static class SetupExtensions
     {
         /// <summary>
