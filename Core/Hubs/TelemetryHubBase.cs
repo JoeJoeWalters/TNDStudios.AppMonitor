@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TNDStudios.AppMonitor.Core.Objects;
 
-namespace TNDStudios.SignalR.Telemetry.Hubs
+namespace TNDStudios.AppMonitor.Core
 {
     public class TelemetryHubBase : Hub
     {
@@ -26,6 +24,14 @@ namespace TNDStudios.SignalR.Telemetry.Hubs
         static TelemetryHubBase()
         {
             applications = new Dictionary<String, ReportingApplication>();
+        }
+
+        /// <summary>
+        /// Default constructor with the App Monitor Core injected into it
+        /// </summary>
+        public TelemetryHubBase(IAppMonitorCore appMonitorCore)
+        {
+
         }
 
         /// <summary>

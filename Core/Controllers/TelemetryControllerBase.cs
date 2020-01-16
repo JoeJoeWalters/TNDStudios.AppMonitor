@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace TNDStudios.AppMonitor.Core.Controllers
+namespace TNDStudios.AppMonitor.Core
 {
     [Route("api/[controller]")]
     public class TelemetryControllerBase : Controller
     {
+        public TelemetryControllerBase(IAppMonitorCore appMonitorCore) { }
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
