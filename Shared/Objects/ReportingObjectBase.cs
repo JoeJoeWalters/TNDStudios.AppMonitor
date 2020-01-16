@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace TNDStudios.AppMonitor.Core.Objects
+namespace TNDStudios.AppMonitor.Objects
 {
     /// <summary>
     /// Base class to define that all objects have an Id and a "received" date and time

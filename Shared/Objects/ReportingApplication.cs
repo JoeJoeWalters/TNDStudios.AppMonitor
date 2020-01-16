@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TNDStudios.AppMonitor.Core.Objects
+namespace TNDStudios.AppMonitor.Objects
 {
     [JsonObject]
     public class ReportingApplication : ReportingObjectBase

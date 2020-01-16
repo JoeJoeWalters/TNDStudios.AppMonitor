@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TNDStudios.AppMonitor.Core.Objects;
+using TNDStudios.AppMonitor.Objects;
 
 namespace TNDStudios.AppMonitor.Core
 {

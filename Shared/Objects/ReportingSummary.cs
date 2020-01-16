@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace TNDStudios.AppMonitor.Core.Objects
+namespace TNDStudios.AppMonitor.Objects
 {
     /// <summary>
     /// Summary of what has been happening since the last time the services was 

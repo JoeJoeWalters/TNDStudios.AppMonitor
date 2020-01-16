@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace TNDStudios.AppMonitor.Core.Objects
+namespace TNDStudios.AppMonitor.Objects
 {
     [JsonObject]
     public class ReportingMetric : ReportingObjectBase
