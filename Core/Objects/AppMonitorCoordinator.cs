@@ -4,7 +4,7 @@ using TNDStudios.AppMonitor.Objects;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    public interface IAppMonitorCore
+    public interface IAppMonitorCoordinator
     {       
         /// <summary>
         /// Get a summary of the state of the system
@@ -20,7 +20,7 @@ namespace TNDStudios.AppMonitor.Core
         ReportingApplication GetApplication(String applicationName);
     }
 
-    public class AppMonitorCore : IAppMonitorCore
+    public class AppMonitorCoordinator : IAppMonitorCoordinator
     {
         // Locking object for the dictionary rather than putting a lock on the dictionary itself
         // so we can dirty read the metrics without slowing down the app but creates and deletes
@@ -84,7 +84,7 @@ namespace TNDStudios.AppMonitor.Core
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public AppMonitorCore()
+        public AppMonitorCoordinator()
         {
             // Set up a blank repository for all of the applicatons that interact with this monitor instance
             applications = new Dictionary<string, ReportingApplication>() { };

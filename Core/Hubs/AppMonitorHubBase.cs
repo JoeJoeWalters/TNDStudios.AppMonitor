@@ -6,26 +6,19 @@ using TNDStudios.AppMonitor.Objects;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    public class TelemetryHubBase : Hub
+    public class AppMonitorHubBase : Hub
     {
         /// <summary>
         /// INjected core service from the Singleton provided at setup
         /// </summary>
-        private readonly IAppMonitorCore appMonitorCore;
-
-        /// <summary>
-        /// On absolute start then set up the arrays needed across sessions
-        /// </summary>
-        static TelemetryHubBase()
-        {
-        }
+        private readonly IAppMonitorCoordinator coordinator;
 
         /// <summary>
         /// Default constructor with the App Monitor Core injected into it
         /// </summary>
-        public TelemetryHubBase(IAppMonitorCore appMonitorCore)
+        public AppMonitorHubBase(IAppMonitorCoordinator coordinator)
         {
-            this.appMonitorCore = appMonitorCore;
+            this.coordinator = coordinator;
         }
 
         /// <summary>
@@ -48,14 +41,14 @@ namespace TNDStudios.AppMonitor.Core
 
         public async Task SendMetric(string applicationName, string property, string metric)
         {
-            ReportingApplication application = appMonitorCore.GetApplication(applicationName);
+            ReportingApplication application = coordinator.GetApplication(applicationName);
             application.Metrics.Add(new ReportingMetric() { Property = property, Value = metric });
             await Clients.All.SendAsync("ReceiveMetric", applicationName, property, metric);
         }
 
         public async Task SendHeartbeat(string applicationName, DateTime nextRunTime)
         {
-            ReportingApplication application = appMonitorCore.GetApplication(applicationName);
+            ReportingApplication application = coordinator.GetApplication(applicationName);
             application.NextRunTime = nextRunTime;
             application.Heartbeats.Add(new ReportingHeartbeat() { NextRunTime = nextRunTime });
             await Clients.All.SendAsync("ReceiveHeartbeat", applicationName, nextRunTime);
@@ -63,7 +56,7 @@ namespace TNDStudios.AppMonitor.Core
 
         public async Task SendError(string applicationName, string errorMessage)
         {
-            ReportingApplication application = appMonitorCore.GetApplication(applicationName);
+            ReportingApplication application = coordinator.GetApplication(applicationName);
             application.Errors.Add(new ReportingError() { Message = errorMessage });
             await Clients.All.SendAsync("ReceiveError", applicationName, errorMessage);
         }

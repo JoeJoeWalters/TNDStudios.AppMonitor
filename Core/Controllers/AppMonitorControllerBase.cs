@@ -3,10 +3,21 @@ using System.Collections.Generic;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    [Route("api/[controller]")]
-    public class TelemetryControllerBase : Controller
+    public class AppMonitorControllerBase : Controller
     {
-        public TelemetryControllerBase(IAppMonitorCore appMonitorCore) { }
+        /// <summary>
+        /// INjected core service from the Singleton provided at setup
+        /// </summary>
+        private readonly IAppMonitorCoordinator coordinator;
+
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="appMonitorCore"></param>
+        public AppMonitorControllerBase(IAppMonitorCoordinator coordinator) 
+        {
+            this.coordinator = coordinator;
+        }
 
         // GET: api/<controller>
         [HttpGet]

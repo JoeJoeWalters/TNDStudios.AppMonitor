@@ -13,7 +13,7 @@ namespace TNDStudios.AppMonitor.Core
         public static IServiceCollection AddAppMonitor(this IServiceCollection services)
         {
             // Add a singleton for the App Monitor Core so it can be injected in to constructors etc.
-            services.AddSingleton<IAppMonitorCore>(new AppMonitorCore() { });
+            services.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
 
             return services;
         }

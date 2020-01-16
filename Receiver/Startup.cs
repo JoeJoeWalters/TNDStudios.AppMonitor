@@ -60,7 +60,7 @@ namespace TNDStudios.AppMonitor.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<TelemetryHub>("/signalr/telemetry", options =>
+                endpoints.MapHub<AppMonitorHub>("/signalr/telemetry", options =>
                 {
                     //options.Transports = HttpTransportType.LongPolling;
                 });
