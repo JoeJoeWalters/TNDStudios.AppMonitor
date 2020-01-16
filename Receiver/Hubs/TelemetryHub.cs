@@ -2,7 +2,7 @@
 
 namespace TNDStudios.AppMonitor.Service
 {
-    public class TelemetryHub : TelemetryHubBases
+    public class TelemetryHub : TelemetryHubBase
     {
         public TelemetryHub(IAppMonitorCore appMonitorCore) : base(appMonitorCore) { }
     }
