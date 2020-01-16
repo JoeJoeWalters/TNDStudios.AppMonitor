@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TNDStudios.AppMonitor.Core;
 
 namespace TNDStudios.AppMonitor.Service
 {
@@ -27,6 +28,7 @@ namespace TNDStudios.AppMonitor.Service
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+            services.AddAppMonitor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +65,9 @@ namespace TNDStudios.AppMonitor.Service
                     //options.Transports = HttpTransportType.LongPolling;
                 });
             });
+
+            // Tell the system to use the Application Monitor
+            app.UseAppMonitor();
         }
     }
 }
