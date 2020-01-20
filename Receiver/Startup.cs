@@ -60,14 +60,14 @@ namespace TNDStudios.AppMonitor.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<AppMonitorHub>("/signalr/telemetry", options =>
+                endpoints.MapHub<AppMonitorHub>("/signalr/appmonitor", options =>
                 {
                     //options.Transports = HttpTransportType.LongPolling;
                 });
             });
 
             // Tell the system to use the Application Monitor
-            app.UseAppMonitor();
+            app.UseAppMonitor(setup => { });
         }
     }
 }

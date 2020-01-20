@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace TNDStudios.AppMonitor.Core
 {
@@ -23,7 +24,10 @@ namespace TNDStudios.AppMonitor.Core
         /// </summary>
         /// <param name="applicationBuilder">The Application Builder injected into the Web Application</param>
         /// <returns>The modified Application Builder</returns>
-        public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder applicationBuilder)
-            => applicationBuilder;
+        public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder applicationBuilder,
+            Action<ApplicationConfiguration> setup)
+        { 
+            return applicationBuilder;
+        }
     }
 }
