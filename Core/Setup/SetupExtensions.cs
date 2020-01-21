@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TNDStudios.AppMonitor.Core
 {
@@ -16,6 +14,12 @@ namespace TNDStudios.AppMonitor.Core
         {
             // Add a singleton for the App Monitor Core so it can be injected in to constructors etc.
             services.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
+
+            // Make sure SignalR is added as a service
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             return services;
         }
@@ -38,7 +42,7 @@ namespace TNDStudios.AppMonitor.Core
                     //options.Transports = HttpTransportType.LongPolling;
                 }));
 
- 
+
             return app;
         }
     }

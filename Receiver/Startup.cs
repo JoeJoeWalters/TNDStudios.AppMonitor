@@ -22,7 +22,6 @@ namespace TNDStudios.AppMonitor.Service
         {
             services.AddResponseCaching();
             services.AddRazorPages();
-            services.AddSignalR(options => { options.EnableDetailedErrors = true; });
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
