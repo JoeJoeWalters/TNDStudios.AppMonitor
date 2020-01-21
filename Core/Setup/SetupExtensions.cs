@@ -25,7 +25,7 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns>The modified Application Builder</returns>
         public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder app,
             AppMonitorConfig configuration)
-        {
+        {   
             // Set up the given endpoints based on the configuration
             app.UseEndpoints(endpoints => 
                 endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
