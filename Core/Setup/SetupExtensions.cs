@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TNDStudios.AppMonitor.Core
 {
@@ -25,14 +27,18 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns>The modified Application Builder</returns>
         public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder app,
             AppMonitorConfig configuration)
-        {   
+        {
+            // Enforce Routing Usage
+            app.UseRouting();
+
             // Set up the given endpoints based on the configuration
-            app.UseEndpoints(endpoints => 
+            app.UseEndpoints(endpoints =>
                 endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
                 {
                     //options.Transports = HttpTransportType.LongPolling;
                 }));
 
+ 
             return app;
         }
     }

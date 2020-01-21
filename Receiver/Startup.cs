@@ -52,7 +52,7 @@ namespace TNDStudios.AppMonitor.Service
             app.UseRouting();
 
             app.UseAuthorization();
-            
+
             app.UseWebSockets();
             app.UseCors(
                 options => options.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader()
@@ -64,7 +64,12 @@ namespace TNDStudios.AppMonitor.Service
             });
 
             // Tell the system to use the Application Monitor
-            app.UseAppMonitor(new AppMonitorConfig() { ApiEndpoint = String.Empty, SignalREndpoint = "/signalr/appmonitor" });
+            app.UseAppMonitor(
+                new AppMonitorConfig()
+                {
+                    ApiEndpoint = "/api/appmonitor",
+                    SignalREndpoint = "/signalr/appmonitor"
+                });
         }
     }
 }
