@@ -7,7 +7,7 @@ namespace Transmitter
 {
     class Program
     {
-        private const String monitorServiceUri = "https://localhost:44392/signalr/telemetry";
+        private const String monitorServiceUri = "https://localhost:44392/signalr/appmonitor";
 
         private static List<MonitorClient> applications = new List<MonitorClient>();
         private static MonitorClient RandomApplication()

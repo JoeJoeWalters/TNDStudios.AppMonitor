@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using TNDStudios.AppMonitor.Core;
 
 namespace TNDStudios.AppMonitor.Service
@@ -60,14 +61,10 @@ namespace TNDStudios.AppMonitor.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<AppMonitorHub>("/signalr/appmonitor", options =>
-                {
-                    //options.Transports = HttpTransportType.LongPolling;
-                });
             });
 
             // Tell the system to use the Application Monitor
-            app.UseAppMonitor(setup => { });
+            app.UseAppMonitor(new AppMonitorConfig() { ApiEndpoint = String.Empty, SignalREndpoint = "/signalr/appmonitor" });
         }
     }
 }

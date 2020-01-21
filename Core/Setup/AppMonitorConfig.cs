@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    public class ApplicationConfiguration
+    public class AppMonitorConfig
     {
         /// <summary>
         /// The endpoint to set up where SignalR coordination will happen

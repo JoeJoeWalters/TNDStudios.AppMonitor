@@ -28,7 +28,7 @@ var app = new Vue({
 
         load: function () {
 
-            var connection = new signalR.HubConnectionBuilder().withUrl("/signalr/telemetry").build();
+            var connection = new signalR.HubConnectionBuilder().withUrl("/signalr/appmonitor").build();
 
             connection.on("ReceiveMetric", function (applicationName, property, metric) {
                 var application = app.page.applications.addApplication(applicationName);
