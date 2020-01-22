@@ -1,12 +1,12 @@
 ﻿var tndStudios = tndStudios || {};
-tndStudios.models = tndStudios.models || {};
-tndStudios.models.telemetry =
+tndStudios.appMonitor = tndStudios.appMonitor || {};
+tndStudios.appMonitor.model =
     {
         // Telemetry Page Model
         page: function () {
 
             // The properties of the object            
-            this.applications = new tndStudios.models.telemetry.applications(null); // The applications object
+            this.applications = new tndStudios.appMonitor.model.applications(null); // The applications object
         },
 
         // Application Model
@@ -44,7 +44,7 @@ tndStudios.models.telemetry =
             this.addApplication = function (applicationName) {
                 var found = $.grep(this.applicationArray, function (item) { return item.title == applicationName; });
                 if (found.length == 0) {
-                    var result = new tndStudios.models.telemetry.application(applicationName);
+                    var result = new tndStudios.appMonitor.model.application(applicationName);
                     this.applicationArray.push(result);
                     return result;
                 }

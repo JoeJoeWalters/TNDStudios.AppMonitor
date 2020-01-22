@@ -39,11 +39,11 @@ namespace TNDStudios.AppMonitor.Core
             return reportingSummary;
         }
 
-        public async Task SendMetric(string applicationName, string property, string metric)
+        public async Task SendMetric(string applicationName, string path, string metric)
         {
             ReportingApplication application = coordinator.GetApplication(applicationName);
-            application.Metrics.Add(new ReportingMetric() { Property = property, Value = metric });
-            await Clients.All.SendAsync("ReceiveMetric", applicationName, property, metric);
+            application.Metrics.Add(new ReportingMetric() { Path = path, Value = metric });
+            await Clients.All.SendAsync("ReceiveMetric", applicationName, path, metric);
         }
 
         public async Task SendHeartbeat(string applicationName, DateTime nextRunTime)

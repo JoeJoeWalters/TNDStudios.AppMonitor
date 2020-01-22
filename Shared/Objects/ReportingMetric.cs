@@ -6,8 +6,8 @@ namespace TNDStudios.AppMonitor.Objects
     [JsonObject]
     public class ReportingMetric : ReportingObjectBase
     {
-        [JsonProperty(PropertyName = "property", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Property { get; set; }
+        [JsonProperty(PropertyName = "path", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public String Path { get; set; }
 
         [JsonProperty(PropertyName = "value", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public String Value { get; set; }
