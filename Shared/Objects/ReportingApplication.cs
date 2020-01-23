@@ -7,11 +7,17 @@ namespace TNDStudios.AppMonitor.Objects
     [JsonObject]
     public class ReportingApplication : ReportingObjectBase
     {
+        /// <summary>
+        /// Name of the application
+        /// </summary>
         [JsonProperty(PropertyName = "name", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public String Name { get; set; }
 
+        /// <summary>
+        /// Summary of metrics per path (not individually received metrics)
+        /// </summary>
         [JsonProperty(PropertyName = "metrics", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<ReportingMetric> Metrics { get; set; }
+        public Dictionary<String, ReportingMetricGroup> Metrics { get; set; }
 
         [JsonProperty(PropertyName = "errors", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ReportingError> Errors { get; set; }
@@ -25,7 +31,7 @@ namespace TNDStudios.AppMonitor.Objects
         public ReportingApplication() : base()
         {
             Name = String.Empty;
-            Metrics = new List<ReportingMetric>();
+            Metrics = new Dictionary<String, ReportingMetricGroup>();
             Errors = new List<ReportingError>();
             NextRunTime = DateTime.MinValue;
         }
