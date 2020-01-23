@@ -33,13 +33,10 @@ namespace Transmitter
 
                 Double randomVal = (new Random()).NextDouble();
 
-                if (randomVal < 0.1)
-                    monitorClient.SendHeartbeat();
-
                 if (randomVal > 0.9)
                     monitorClient.SendError("Shit went sideways!");
 
-                monitorClient.SendMetric("Record", (Int32)(randomVal * 100));
+                monitorClient.SendMetric("Record", randomVal * 100D);
                 Thread.Sleep((Int32)((new Random()).NextDouble() * 2000));
             }
         }

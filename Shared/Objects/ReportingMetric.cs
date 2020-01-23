@@ -10,7 +10,7 @@ namespace TNDStudios.AppMonitor.Objects
         public String Path { get; set; }
 
         [JsonProperty(PropertyName = "value", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Value { get; set; }
+        public Double Value { get; set; }
 
         /// <summary>
         /// Default constructor using base to set up core values

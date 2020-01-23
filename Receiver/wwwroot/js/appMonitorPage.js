@@ -36,11 +36,6 @@ var app = new Vue({
                 application.addMetric(encodedMsg);
             });
 
-            connection.on("ReceiveHeartbeat", function (applicationName, nextRunTime) {
-                var application = app.page.applications.addApplication(applicationName);
-                var encodedMsg = "Heartbeat";
-            });
-
             connection.on("ReceiveError", function (applicationName, errorMessage) {
                 var application = app.page.applications.addApplication(applicationName);
                 var encodedMsg = applicationName + ": Error '" + errorMessage + "'";

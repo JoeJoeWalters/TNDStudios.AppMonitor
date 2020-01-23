@@ -67,34 +67,7 @@ namespace TNDStudios.AppMonitor.Client
                 }
             }
         }
-
-        /// <summary>
-        /// Send heartbeat information to the service (tell the service that the system is alive
-        /// still)
-        /// </summary>
-        /// <returns>If the heartbeat was sent</returns>
-        public Boolean SendHeartbeat()
-        {
-            // Is the hub connected to the client?
-            if (connection.State == HubConnectionState.Connected)
-            {
-                try
-                {
-                    Int32 randomSeconds = (Int32)(2.0 * 60.0 * (new Random().NextDouble()));
-                    DateTime nextRunTime = DateTime.UtcNow.AddSeconds(randomSeconds);
-                    connection.InvokeAsync("SendHeartbeat", applicationName, nextRunTime).Wait();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            else
-                return false;
-
-            return true;
-        }
-
+        
         /// <summary>
         /// Transmit an error from the application to the hub
         /// </summary>
@@ -126,7 +99,7 @@ namespace TNDStudios.AppMonitor.Client
         /// <param name="property">The "name" of the metric property</param>
         /// <param name="metric">The value of the metric</param>
         /// <returns></returns>
-        public Boolean SendMetric(String property, Int32 metric)
+        public Boolean SendMetric(String property, Double metric)
         {
             // Is the hub connected to the client?
             if (connection.State == HubConnectionState.Connected)

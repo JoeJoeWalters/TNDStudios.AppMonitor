@@ -39,19 +39,11 @@ namespace TNDStudios.AppMonitor.Core
             return reportingSummary;
         }
 
-        public async Task SendMetric(string applicationName, string path, string metric)
+        public async Task SendMetric(string applicationName, string path, Double metric)
         {
             ReportingApplication application = coordinator.GetApplication(applicationName);
             application.Metrics.Add(new ReportingMetric() { Path = path, Value = metric });
             await Clients.All.SendAsync("ReceiveMetric", applicationName, path, metric);
-        }
-
-        public async Task SendHeartbeat(string applicationName, DateTime nextRunTime)
-        {
-            ReportingApplication application = coordinator.GetApplication(applicationName);
-            application.NextRunTime = nextRunTime;
-            application.Heartbeats.Add(new ReportingHeartbeat() { NextRunTime = nextRunTime });
-            await Clients.All.SendAsync("ReceiveHeartbeat", applicationName, nextRunTime);
         }
 
         public async Task SendError(string applicationName, string errorMessage)

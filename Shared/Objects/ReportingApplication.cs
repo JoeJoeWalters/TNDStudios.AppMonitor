@@ -16,9 +16,6 @@ namespace TNDStudios.AppMonitor.Objects
         [JsonProperty(PropertyName = "errors", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ReportingError> Errors { get; set; }
 
-        [JsonProperty(PropertyName = "heartbeats", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<ReportingHeartbeat> Heartbeats { get; set; }
-
         [JsonProperty(PropertyName = "nextRunTime", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime NextRunTime { get; set; }
 
@@ -30,7 +27,6 @@ namespace TNDStudios.AppMonitor.Objects
             Name = String.Empty;
             Metrics = new List<ReportingMetric>();
             Errors = new List<ReportingError>();
-            Heartbeats = new List<ReportingHeartbeat>();
             NextRunTime = DateTime.MinValue;
         }
     }
