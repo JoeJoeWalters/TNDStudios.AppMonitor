@@ -8,6 +8,11 @@ namespace TNDStudios.AppMonitor.Objects
     public class ReportingApplication : ReportingObjectBase
     {
         /// <summary>
+        /// Locking objects so we can handle async calls with wiping out existing data
+        /// </summary>
+        private Object metricLock = new Object(); // Locking for adding new metric paths
+
+        /// <summary>
         /// Name of the application
         /// </summary>
         [JsonProperty(PropertyName = "name", DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -34,6 +39,33 @@ namespace TNDStudios.AppMonitor.Objects
             Metrics = new Dictionary<String, ReportingMetricGroup>();
             Errors = new List<ReportingError>();
             NextRunTime = DateTime.MinValue;
+        }
+
+        /// <summary>
+        /// Add data to metrics, does any locking needed to add a new metric group if one doesn't
+        /// already exist then passes the data down in to the reporting group to handle locking when
+        /// adding new summaries
+        /// </summary>
+        /// <param name="path">The metric path for the reporting group</param>
+        /// <param name="metric">The value of the current metric</param>
+        /// <returns></returns>
+        public Boolean AddMetric(String path, Double metric)
+        {
+            // Does this metric path not exist?
+            if (!Metrics.ContainsKey(path))
+            {
+                // Lock the metrics whilst we add the path so we don't have another 
+                // call interfering
+                lock (metricLock)
+                {
+                    // Check that another call hasn't added the key whilst we were locking
+                    if (!Metrics.ContainsKey(path))
+                        Metrics[path] = new ReportingMetricGroup(); // Add the new metric group
+                }
+            }
+
+            // Pass in the metric to be handled by the metric group (there might be other locking)
+            return Metrics[path].AddMetric(metric);
         }
     }
 }

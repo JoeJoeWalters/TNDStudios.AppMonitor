@@ -108,7 +108,7 @@ namespace TNDStudios.AppMonitor.Client
                 {
                     connection.InvokeAsync("SendMetric", applicationName, property, metric).Wait();
                 }
-                catch(Exception ex)
+                catch
                 {
                     return false;
                 }

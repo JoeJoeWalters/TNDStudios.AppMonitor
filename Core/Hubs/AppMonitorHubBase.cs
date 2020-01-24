@@ -49,10 +49,9 @@ namespace TNDStudios.AppMonitor.Core
         public async Task SendMetric(string applicationName, string path, Double metric)
         {
             ReportingApplication application = coordinator.GetApplication(applicationName);
-#if DEBUG
-#warning Summarise and locking needed so that metrics can be added by path and summary
-#endif
-            //application.Metrics.Add(new ReportingMetric() { Path = path, Value = metric });
+
+            // Ask the application to add the metric and handle any locking internally
+            application.AddMetric(path, metric);
 
             // Tell all the clients a new metric was received
             await Clients.All.SendAsync("ReceiveMetric", applicationName, path, metric);
