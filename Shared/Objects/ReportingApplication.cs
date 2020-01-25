@@ -67,5 +67,17 @@ namespace TNDStudios.AppMonitor.Objects
             // Pass in the metric to be handled by the metric group (there might be other locking)
             return Metrics[path].AddMetric(metric);
         }
+
+        /// <summary>
+        /// Go through each path and prune the metrics
+        /// </summary>
+        public void IndexMetrics(DateTime now)
+        {
+            // No need to lock as we are only going to kill items that 
+            // are unlikely to be written to (e.g. old items out of the current
+            // timeframe)
+            foreach (String key in Metrics.Keys)
+                Metrics[key].IndexMetrics(now);
+        }
     }
 }

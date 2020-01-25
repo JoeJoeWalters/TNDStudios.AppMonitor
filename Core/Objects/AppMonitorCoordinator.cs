@@ -18,6 +18,11 @@ namespace TNDStudios.AppMonitor.Core
         /// <param name="applicationName">The key for the application</param>
         /// <returns>The Application Object</returns>
         ReportingApplication GetApplication(String applicationName);
+
+        /// <summary>
+        /// Go through each application and prune the metrics
+        /// </summary>
+        void IndexMetrics();
     }
 
     public class AppMonitorCoordinator : IAppMonitorCoordinator
@@ -79,6 +84,22 @@ namespace TNDStudios.AppMonitor.Core
             }
             else
                 return applications[searchString]; // Send the existing one back
+        }
+
+        /// <summary>
+        /// Go through each application and prune the metrics
+        /// </summary>
+        public void IndexMetrics()
+        {
+            // Coordinate the time so all metrics are snipped
+            // at the same time despite rolling over to a new day etc.
+            DateTime now = DateTime.UtcNow; 
+
+            // No need to lock as we are only going to kill items that 
+            // are unlikely to be written to (e.g. old items out of the current
+            // timeframe)
+            foreach (String key in applications.Keys)
+                applications[key].IndexMetrics(now);
         }
 
         /// <summary>

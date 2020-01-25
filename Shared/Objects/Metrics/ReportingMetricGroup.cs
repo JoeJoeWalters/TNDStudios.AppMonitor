@@ -79,10 +79,9 @@ namespace TNDStudios.AppMonitor.Objects
         /// Reindexes the metrics and whilst it is happening it will lock new metrics being added
         /// </summary>
         /// <returns>Success or failure</returns>
-        public Boolean IndexMetrics()
+        public Boolean IndexMetrics(DateTime now)
         {
             // Calculate the boundaries we should be cleaning beyond
-            DateTime now = DateTime.UtcNow;
             DateTime minuteBoundary = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0).AddMinutes(-120);
             DateTime hourBoundary = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0).AddHours(-48);
             DateTime dayBoundary = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0).AddDays(-30);

@@ -21,6 +21,8 @@ namespace TNDStudios.AppMonitor.Core
                 options.EnableDetailedErrors = true;
             });
 
+            services.AddHostedService<MetricMonitor>();
+
             return services;
         }
 
