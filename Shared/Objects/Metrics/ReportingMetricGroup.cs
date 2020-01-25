@@ -81,12 +81,35 @@ namespace TNDStudios.AppMonitor.Objects
         /// <returns>Success or failure</returns>
         public Boolean IndexMetrics()
         {
-            lock(lockingObject)
-            {
+            // Calculate the boundaries we should be cleaning beyond
+            DateTime now = DateTime.UtcNow;
+            DateTime minuteBoundary = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0).AddMinutes(-120);
+            DateTime hourBoundary = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0).AddHours(-48);
+            DateTime dayBoundary = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0).AddDays(-30);
 
+            lock (lockingObject)
+            {
+                RemoveMetrics(Minutes, minuteBoundary); // Clean up the minutes summary
+                RemoveMetrics(Hours, hourBoundary); // Clean up the hours summary
+                RemoveMetrics(Days, dayBoundary); // Clean up the days summary
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Remove metric pots / summaries older than a given boundary point
+        /// </summary>
+        /// <param name="pot">The pot (days, hours and minutes)</param>
+        /// <param name="key">The boundary point (start of the data to keep)</param>
+        private void RemoveMetrics(Dictionary<DateTime, Double> pot, DateTime boundary)
+        {
+            // Check each item in the pot to see if it is too old
+            foreach(DateTime key in pot.Keys)
+            {
+                if (key < boundary)
+                    pot.Remove(key);
+            }
         }
     }
 }
