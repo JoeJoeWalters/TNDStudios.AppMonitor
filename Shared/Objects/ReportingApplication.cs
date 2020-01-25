@@ -22,7 +22,7 @@ namespace TNDStudios.AppMonitor.Objects
         /// Summary of metrics per path (not individually received metrics)
         /// </summary>
         [JsonProperty(PropertyName = "metrics", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public Dictionary<String, ReportingMetricGroup> Metrics { get; set; }
+        public Dictionary<String, ReportingMetrics> Metrics { get; set; }
 
         [JsonProperty(PropertyName = "errors", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ReportingError> Errors { get; set; }
@@ -36,7 +36,7 @@ namespace TNDStudios.AppMonitor.Objects
         public ReportingApplication() : base()
         {
             Name = String.Empty;
-            Metrics = new Dictionary<String, ReportingMetricGroup>();
+            Metrics = new Dictionary<String, ReportingMetrics>();
             Errors = new List<ReportingError>();
             NextRunTime = DateTime.MinValue;
         }
@@ -60,7 +60,7 @@ namespace TNDStudios.AppMonitor.Objects
                 {
                     // Check that another call hasn't added the key whilst we were locking
                     if (!Metrics.ContainsKey(path))
-                        Metrics[path] = new ReportingMetricGroup(); // Add the new metric group
+                        Metrics[path] = new ReportingMetrics(); // Add the new metric group
                 }
             }
 

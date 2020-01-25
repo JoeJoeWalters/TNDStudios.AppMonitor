@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TNDStudios.AppMonitor.Objects
 {
-    public class ReportingMetricGroup
+    [JsonObject]
+    public class ReportingMetrics
     {
         /// <summary>
         /// Locking object used for when adding data across the various pots of data
@@ -13,22 +15,25 @@ namespace TNDStudios.AppMonitor.Objects
         /// <summary>
         /// Sum of metrics for each minute in the last 60 minutes
         /// </summary>
+        [JsonProperty(PropertyName = "minutes", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<DateTime, Double> Minutes { get; set; }
 
         /// <summary>
         /// Sum of metrics for each hour in the last calendar day
         /// </summary>
+        [JsonProperty(PropertyName = "hours", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<DateTime, Double> Hours { get; set; }
 
         /// <summary>
         /// Sum of metrics for each day
         /// </summary>
+        [JsonProperty(PropertyName = "days", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<DateTime, Double> Days { get; set; }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public ReportingMetricGroup()
+        public ReportingMetrics()
         {
             Minutes = new Dictionary<DateTime, Double>();
             Hours = new Dictionary<DateTime, Double>();
