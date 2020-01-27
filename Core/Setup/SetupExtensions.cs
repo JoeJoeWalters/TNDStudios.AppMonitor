@@ -21,6 +21,9 @@ namespace TNDStudios.AppMonitor.Core
                 options.EnableDetailedErrors = true;
             });
 
+            services.AddControllers();
+            services.AddRouting();
+
             services.AddHostedService<MetricMonitor>();
 
             return services;
@@ -39,10 +42,13 @@ namespace TNDStudios.AppMonitor.Core
 
             // Set up the given endpoints based on the configuration
             app.UseEndpoints(endpoints =>
-                endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
                 {
-                    //options.Transports = HttpTransportType.LongPolling;
-                }));
+                    endpoints.MapControllers();
+                    endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
+                    {
+                        //options.Transports = HttpTransportType.LongPolling;
+                    });
+                });
 
 
             return app;

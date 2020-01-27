@@ -6,6 +6,8 @@ namespace TNDStudios.AppMonitor.Core
 #warning TODO: investigate area routing so don't have to define base class inheritance by method
     // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/areas?view=aspnetcore-2.1
 
+    
+    [Route("api/appmonitor")]
     public class AppMonitorControllerBase : Controller
     {
         /// <summary>
