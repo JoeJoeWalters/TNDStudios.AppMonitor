@@ -43,7 +43,10 @@ namespace TNDStudios.AppMonitor.Core
             // Set up the given endpoints based on the configuration
             app.UseEndpoints(endpoints =>
                 {
+                    // Make sure this project maps any controllers if not already done so
                     endpoints.MapControllers();
+
+                    // Ensure the signalR hub is mapped
                     endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
                     {
                         //options.Transports = HttpTransportType.LongPolling;
