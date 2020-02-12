@@ -27,7 +27,12 @@ namespace TNDStudios.AppMonitor.Service
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-            services.AddAppMonitor();
+            services.AddAppMonitor(
+                new AppMonitorConfig()
+                {
+                    ApiEndpoint = "/api/appmonitor",
+                    SignalREndpoint = "/signalr/appmonitor"
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,12 +67,7 @@ namespace TNDStudios.AppMonitor.Service
             });
 
             // Tell the system to use the Application Monitor
-            app.UseAppMonitor(
-                new AppMonitorConfig()
-                {
-                    ApiEndpoint = "/api/appmonitor",
-                    SignalREndpoint = "/signalr/appmonitor"
-                });
+            app.UseAppMonitor();
         }
     }
 }

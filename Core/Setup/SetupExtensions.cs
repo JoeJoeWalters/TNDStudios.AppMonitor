@@ -12,20 +12,19 @@ namespace TNDStudios.AppMonitor.Core
         /// Reference to the services provider built from the service collection used on startup so it can be used in building the app
         /// and resolving service instances
         /// </summary>
-        private static IServiceProvider serviceProvider;
+        private static IServiceCollection services;
 
         /// <summary>
         /// Extension of the Service Collection so it can be added in Web Application startup
         /// </summary>
         /// <param name="serviceCollection">The Sercice Collection injected into the Web Application</param>
         /// <returns>The modified Service Collection</returns>
-        public static IServiceCollection AddAppMonitor(this IServiceCollection serviceCollection)
-        {
-            // Add a singleton for the App Monitor Core so it can be injected in to constructors etc.
+        public static IServiceCollection AddAppMonitor(this IServiceCollection serviceCollection,
+            AppMonitorConfig configuration)
+        { 
+            // Add a singleton for the App Monitor Core and the configuration so it can be injected in to constructors etc.
             serviceCollection.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
-
-            // Remind the system of the services reference for use later to resolve instances (Singletons)
-            serviceProvider = serviceCollection.BuildServiceProvider();
+            serviceCollection.AddSingleton<AppMonitorConfig>(configuration);
 
             // Make sure SignalR is added as a service
             serviceCollection.AddSignalR(options =>
@@ -38,6 +37,9 @@ namespace TNDStudios.AppMonitor.Core
 
             serviceCollection.AddHostedService<MetricMonitor>();
 
+            // Assign locally to be picked up by the UseAppMonitor method to create the serviceProvider implementation
+            services = serviceCollection; 
+
             return serviceCollection;
         }
 
@@ -46,17 +48,22 @@ namespace TNDStudios.AppMonitor.Core
         /// </summary>
         /// <param name="applicationBuilder">The Application Builder injected into the Web Application</param>
         /// <returns>The modified Application Builder</returns>
-        public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder app,
-            AppMonitorConfig configuration)
+        public static IApplicationBuilder UseAppMonitor(this IApplicationBuilder app)
         {
             // Enforce Routing Usage
             app.UseRouting();
+
+            // Remind the system of the services reference for use later to resolve instances (Singletons)
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             // Create a new instance of the API middleware, can't resolve services yet by this point
             // from the serviceprovider so have to take the previously construted coordinator and pass it
             // in instead
             APIMiddleware middleware = new APIMiddleware(//appMonitorCoordinator);
                 (IAppMonitorCoordinator)serviceProvider.GetService(typeof(IAppMonitorCoordinator)));
+
+            // Get instance of the configuration from the service provider
+            AppMonitorConfig configuration = (AppMonitorConfig)serviceProvider.GetService(typeof(AppMonitorConfig));
 
             // Set up the given hub endpoints based on the configuration when the first negotiation happens
             // reason this is inside here rather than outside is that the ASP.Net middleware and SignalR's own 
