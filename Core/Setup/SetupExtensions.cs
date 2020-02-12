@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TNDStudios.AppMonitor.Core
@@ -40,11 +41,30 @@ namespace TNDStudios.AppMonitor.Core
             // Enforce Routing Usage
             app.UseRouting();
 
+
+            // Work that doesn't affect the response processing
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
+                {
+                }
+                await next.Invoke();
+#warning TODO: Logging here! As it doesn't affect the response
+            });
+
+            app.Run(async context =>
+            {
+                if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
+                {
+                    await context.Response.WriteAsync("You hit the app monitor.");
+                }
+            });
+
             // Set up the given endpoints based on the configuration
             app.UseEndpoints(endpoints =>
                 {
                     // Make sure this project maps any controllers if not already done so
-                    endpoints.MapControllers();
+                    //endpoints.MapControllers();
 
                     // Ensure the signalR hub is mapped
                     endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
