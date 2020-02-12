@@ -6,7 +6,7 @@ using TNDStudios.AppMonitor.Objects;
 
 namespace TNDStudios.AppMonitor.Core
 {
-    public class AppMonitorHubBase : Hub
+    public class AppMonitorHub : Hub
     {
         /// <summary>
         /// INjected core service from the Singleton provided at setup
@@ -16,7 +16,7 @@ namespace TNDStudios.AppMonitor.Core
         /// <summary>
         /// Default constructor with the App Monitor Core injected into it
         /// </summary>
-        public AppMonitorHubBase(IAppMonitorCoordinator coordinator)
+        public AppMonitorHub(IAppMonitorCoordinator coordinator)
         {
             this.coordinator = coordinator;
         }

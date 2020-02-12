@@ -20,11 +20,11 @@ namespace TNDStudios.AppMonitor.Core
         /// <param name="serviceCollection">The Sercice Collection injected into the Web Application</param>
         /// <returns>The modified Service Collection</returns>
         public static IServiceCollection AddAppMonitor(this IServiceCollection serviceCollection,
-            AppMonitorConfig configuration)
+            IAppMonitorConfig configuration)
         { 
             // Add a singleton for the App Monitor Core and the configuration so it can be injected in to constructors etc.
             serviceCollection.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
-            serviceCollection.AddSingleton<AppMonitorConfig>(configuration);
+            serviceCollection.AddSingleton<IAppMonitorConfig>(configuration);
 
             // Make sure SignalR is added as a service
             serviceCollection.AddSignalR(options =>
@@ -56,14 +56,15 @@ namespace TNDStudios.AppMonitor.Core
             // Remind the system of the services reference for use later to resolve instances (Singletons)
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
+            // Get instance of the configuration from the service provider
+            IAppMonitorConfig configuration = (IAppMonitorConfig)serviceProvider.GetService(typeof(IAppMonitorConfig));
+
             // Create a new instance of the API middleware, can't resolve services yet by this point
             // from the serviceprovider so have to take the previously construted coordinator and pass it
             // in instead
-            APIMiddleware middleware = new APIMiddleware(//appMonitorCoordinator);
-                (IAppMonitorCoordinator)serviceProvider.GetService(typeof(IAppMonitorCoordinator)));
-
-            // Get instance of the configuration from the service provider
-            AppMonitorConfig configuration = (AppMonitorConfig)serviceProvider.GetService(typeof(AppMonitorConfig));
+            APIMiddleware middleware = new APIMiddleware(
+                (IAppMonitorCoordinator)serviceProvider.GetService(typeof(IAppMonitorCoordinator)),
+                configuration);
 
             // Set up the given hub endpoints based on the configuration when the first negotiation happens
             // reason this is inside here rather than outside is that the ASP.Net middleware and SignalR's own 
@@ -96,12 +97,12 @@ namespace TNDStudios.AppMonitor.Core
         /// the SignalR internally defined middleware)
         /// </summary>
         /// <param name="app"></param>
-        private static void MapHubs(IApplicationBuilder app, AppMonitorConfig configuration)
+        private static void MapHubs(IApplicationBuilder app, IAppMonitorConfig configuration)
         {
             app.UseEndpoints(endpoints =>
             {
                 // Ensure the signalR hub is mapped
-                endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
+                endpoints.MapHub<AppMonitorHub>(configuration.SignalREndpoint, options =>
                 {
                     //options.Transports = HttpTransportType.LongPolling;
                 });

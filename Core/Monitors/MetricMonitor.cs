@@ -13,6 +13,7 @@ namespace TNDStudios.AppMonitor.Core
         /// </summary>
         private readonly ILogger log;
         private readonly IAppMonitorCoordinator coordinator;
+        private readonly IAppMonitorConfig config;
 
         /// <summary>
         /// Timer used for scheduling of the monitor
@@ -24,10 +25,11 @@ namespace TNDStudios.AppMonitor.Core
         /// </summary>
         /// <param name="log">The logger for the app</param>
         /// <param name="coordinator">Singleton for the coordinator</param>
-        public MetricMonitor(ILogger<MetricMonitor> log, IAppMonitorCoordinator coordinator)
+        public MetricMonitor(ILogger<MetricMonitor> log, IAppMonitorCoordinator coordinator, IAppMonitorConfig config)
         {
             this.log = log;
             this.coordinator = coordinator;
+            this.config = config;
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace TNDStudios.AppMonitor.Core
         public Task StartAsync(CancellationToken cancellationToken)
         {
             log.LogInformation("Starting 'Metric Monitor' scheduler");
-            timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+            timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(config.MetricMonitorInterval));
             return Task.CompletedTask;
         }
 

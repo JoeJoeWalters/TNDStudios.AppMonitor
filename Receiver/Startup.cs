@@ -31,7 +31,8 @@ namespace TNDStudios.AppMonitor.Service
                 new AppMonitorConfig()
                 {
                     ApiEndpoint = "/api/appmonitor",
-                    SignalREndpoint = "/signalr/appmonitor"
+                    SignalREndpoint = "/signalr/appmonitor",
+                    MetricMonitorInterval = 60
                 });
         }
 
