@@ -1,33 +1,44 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace TNDStudios.AppMonitor.Core
 {
     public static class SetupExtensions
     {
         /// <summary>
+        /// Reference to the services provider built from the service collection used on startup so it can be used in building the app
+        /// and resolving service instances
+        /// </summary>
+        private static IServiceProvider serviceProvider;
+
+        /// <summary>
         /// Extension of the Service Collection so it can be added in Web Application startup
         /// </summary>
         /// <param name="serviceCollection">The Sercice Collection injected into the Web Application</param>
         /// <returns>The modified Service Collection</returns>
-        public static IServiceCollection AddAppMonitor(this IServiceCollection services)
+        public static IServiceCollection AddAppMonitor(this IServiceCollection serviceCollection)
         {
             // Add a singleton for the App Monitor Core so it can be injected in to constructors etc.
-            services.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
+            serviceCollection.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
+
+            // Remind the system of the services reference for use later to resolve instances (Singletons)
+            serviceProvider = serviceCollection.BuildServiceProvider();
 
             // Make sure SignalR is added as a service
-            services.AddSignalR(options =>
+            serviceCollection.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
             });
 
-            services.AddControllers();
-            services.AddRouting();
+            serviceCollection.AddControllers();
+            serviceCollection.AddRouting();
 
-            services.AddHostedService<MetricMonitor>();
+            serviceCollection.AddHostedService<MetricMonitor>();
 
-            return services;
+            return serviceCollection;
         }
 
         /// <summary>
@@ -41,6 +52,16 @@ namespace TNDStudios.AppMonitor.Core
             // Enforce Routing Usage
             app.UseRouting();
 
+            // Create a new instance of the API middleware, can't resolve services yet by this point
+            // from the serviceprovider so have to take the previously construted coordinator and pass it
+            // in instead
+            APIMiddleware middleware = new APIMiddleware(//appMonitorCoordinator);
+                (IAppMonitorCoordinator)serviceProvider.GetService(typeof(IAppMonitorCoordinator)));
+
+            // Set up the given hub endpoints based on the configuration when the first negotiation happens
+            // reason this is inside here rather than outside is that the ASP.Net middleware and SignalR's own 
+            // internal overriding of the middleware have different lifetimes and delegation
+            app.Map($"{configuration.SignalREndpoint}/negotiate", map => MapHubs(app, configuration));
 
             // Work that doesn't affect the response processing
             app.Use(async (context, next) =>
@@ -56,25 +77,28 @@ namespace TNDStudios.AppMonitor.Core
             {
                 if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
                 {
-                    await context.Response.WriteAsync("You hit the app monitor.");
+                    await context.Response.WriteAsync("You hit the api.");
                 }
             });
 
-            // Set up the given endpoints based on the configuration
-            app.UseEndpoints(endpoints =>
-                {
-                    // Make sure this project maps any controllers if not already done so
-                    //endpoints.MapControllers();
-
-                    // Ensure the signalR hub is mapped
-                    endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
-                    {
-                        //options.Transports = HttpTransportType.LongPolling;
-                    });
-                });
-
-
             return app;
+        }
+
+        /// <summary>
+        /// Set up the SignalR Hubs (Be careful about interferance from Middleware overloading
+        /// the SignalR internally defined middleware)
+        /// </summary>
+        /// <param name="app"></param>
+        private static void MapHubs(IApplicationBuilder app, AppMonitorConfig configuration)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                // Ensure the signalR hub is mapped
+                endpoints.MapHub<AppMonitorHubBase>(configuration.SignalREndpoint, options =>
+                {
+                    //options.Transports = HttpTransportType.LongPolling;
+                });
+            });
         }
     }
 }
