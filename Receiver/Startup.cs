@@ -27,12 +27,12 @@ namespace TNDStudios.AppMonitor.Service
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-            services.AddAppMonitor(
+            services.AddAppMonitor( 
                 new AppMonitorConfig()
                 {
-                    ApiEndpoint = "/api/appmonitor",
-                    SignalREndpoint = "/signalr/appmonitor",
-                    MetricMonitorInterval = 60
+                    ApiEndpoint = "api/appmonitor",
+                    SignalREndpoint = "signalr/appmonitor",
+                    BackgroundTaskInterval = 60
                 });
         }
 

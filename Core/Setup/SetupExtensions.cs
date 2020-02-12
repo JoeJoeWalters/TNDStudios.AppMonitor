@@ -21,7 +21,10 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns>The modified Service Collection</returns>
         public static IServiceCollection AddAppMonitor(this IServiceCollection serviceCollection,
             IAppMonitorConfig configuration)
-        { 
+        {
+            // Parse and clean the configuration
+            configuration.Parse();
+
             // Add a singleton for the App Monitor Core and the configuration so it can be injected in to constructors etc.
             serviceCollection.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
             serviceCollection.AddSingleton<IAppMonitorConfig>(configuration);

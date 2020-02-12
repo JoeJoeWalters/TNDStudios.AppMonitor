@@ -40,7 +40,7 @@ namespace TNDStudios.AppMonitor.Core
         public Task StartAsync(CancellationToken cancellationToken)
         {
             log.LogInformation("Starting 'Metric Monitor' scheduler");
-            timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(config.MetricMonitorInterval));
+            timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(config.BackgroundTaskInterval));
             return Task.CompletedTask;
         }
 
