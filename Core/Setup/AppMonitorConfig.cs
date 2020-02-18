@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace TNDStudios.AppMonitor.Core
 {
@@ -13,6 +14,11 @@ namespace TNDStudios.AppMonitor.Core
         /// The endpoint to set up where the application when get all other API based actions
         /// </summary>
         String ApiEndpoint { get; set; }
+
+        /// <summary>
+        /// Where the background task will serialise data to and on startup where it will be loaded from
+        /// </summary>
+        String SaveLocation { get; set; }
 
         /// <summary>
         /// THe interval for the background task between runs to tidy up statistics etc.
@@ -38,6 +44,11 @@ namespace TNDStudios.AppMonitor.Core
         /// The endpoint to set up where the application when get all other API based actions
         /// </summary>
         public String ApiEndpoint { get; set; }
+
+        /// <summary>
+        /// Where the background task will serialise data to and on startup where it will be loaded from
+        /// </summary>
+        public String SaveLocation { get; set; }
 
         /// <summary>
         /// THe interval for the background task between runs to tidy up statistics etc.
@@ -67,6 +78,9 @@ namespace TNDStudios.AppMonitor.Core
                 if (!ApiEndpoint.StartsWith('/'))
                     ApiEndpoint = $"/{ApiEndpoint}".Trim();
             }
+
+            if ((SaveLocation ?? String.Empty).Trim() == String.Empty)
+                throw new Exception("No save location defined for Application Monitor");
 
             if (BackgroundTaskInterval < 60)
                 throw new Exception("Application Monitor Background Task Interval is too short at less than 60 seconds");

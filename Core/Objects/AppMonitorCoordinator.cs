@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TNDStudios.AppMonitor.Objects;
 
 namespace TNDStudios.AppMonitor.Core
@@ -23,6 +24,20 @@ namespace TNDStudios.AppMonitor.Core
         /// Go through each application and prune the metrics
         /// </summary>
         void IndexMetrics();
+
+        /// <summary>
+        /// Load the metrics from the cache location (if the service restarted etc.)
+        /// </summary>
+        /// <param name="loadDirectory"></param>
+        /// <returns></returns>
+        Boolean LoadData(String loadDirectory);
+
+        /// <summary>
+        /// Save the current in-memory metrics to the cache location (so if the service reboots it can be reloaded)
+        /// </summary>
+        /// <param name="saveDirectory"></param>
+        /// <returns></returns>
+        Boolean SaveData(String saveDirectory);
     }
 
     public class AppMonitorCoordinator : IAppMonitorCoordinator
@@ -44,7 +59,8 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns></returns>
         public ReportingSummary Summary()
         {
-            return new ReportingSummary() { };
+#warning TODO: Very rough summary based on actual data
+            return new ReportingSummary() { Applications = this.applications.Values.ToList() };
         }
 
         /// <summary>
@@ -100,6 +116,26 @@ namespace TNDStudios.AppMonitor.Core
             // timeframe)
             foreach (String key in applications.Keys)
                 applications[key].IndexMetrics(now);
+        }
+
+        /// <summary>
+        /// Load the metrics from the cache location (if the service restarted etc.)
+        /// </summary>
+        /// <param name="loadDirectory"></param>
+        /// <returns></returns>
+        public Boolean LoadData(String loadDirectory)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Save the current in-memory metrics to the cache location (so if the service reboots it can be reloaded)
+        /// </summary>
+        /// <param name="saveDirectory"></param>
+        /// <returns></returns>
+        public Boolean SaveData(String saveDirectory)
+        {
+            return true;
         }
 
         /// <summary>

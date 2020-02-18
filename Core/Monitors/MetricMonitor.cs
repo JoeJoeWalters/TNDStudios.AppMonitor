@@ -52,6 +52,9 @@ namespace TNDStudios.AppMonitor.Core
         {
             log.LogInformation("Indexing Metrics");
             coordinator.IndexMetrics(); // Index and clean the metrics in memory etc.
+
+            // Save the data to disk as a backup incase of restart etc.
+            coordinator.SaveData(config.SaveLocation);
         }
 
         /// <summary>

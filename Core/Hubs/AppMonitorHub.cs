@@ -22,24 +22,6 @@ namespace TNDStudios.AppMonitor.Core
         }
 
         /// <summary>
-        /// Generate a reporting summary for warboards etc.
-        /// </summary>
-        /// <returns>The consolidated reporting summary</returns>
-        public ReportingSummary GetReportingSummary()
-        {
-            // Create a blank report as we won't be returning everything
-            ReportingSummary reportingSummary =
-                new ReportingSummary()
-                {
-                    Applications = new List<ReportingApplication>()
-                };
-
-            // Loop all the applications
-
-            return reportingSummary;
-        }
-
-        /// <summary>
         /// A metric was received from an application
         /// </summary>
         /// <param name="applicationName">The name of the application</param>

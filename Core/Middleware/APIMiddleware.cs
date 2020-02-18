@@ -16,6 +16,8 @@ namespace TNDStudios.AppMonitor.Core
 {
     public class APIMiddleware
     {
+        private const String summaryEndpoint = "/summary";
+
         /// <summary>
         /// Injected items
         /// </summary>
@@ -46,12 +48,12 @@ namespace TNDStudios.AppMonitor.Core
             if (path.Contains(config.ApiEndpoint.ToLower()))
             {
                 // Decipher the endpoint 
-                if (path.EndsWith("/summary"))
+                if (path.EndsWith(summaryEndpoint))
                 {
-                    // Get the summary to populate the warboard
+                    // Get the summary to populate the UI etc.
                     using (StreamWriter writer = new StreamWriter(context.Response.Body))
                     {
-                        writer.Write(JsonConvert.SerializeObject(new ReportingSummary() { }));
+                        writer.Write(JsonConvert.SerializeObject(coordinator.Summary()));
                     }
                     context.Response.StatusCode = (int)HttpStatusCode.OK;
                 }

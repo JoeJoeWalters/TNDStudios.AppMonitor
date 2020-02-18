@@ -26,7 +26,10 @@ namespace TNDStudios.AppMonitor.Core
             configuration.Parse();
 
             // Add a singleton for the App Monitor Core and the configuration so it can be injected in to constructors etc.
-            serviceCollection.AddSingleton<IAppMonitorCoordinator>(new AppMonitorCoordinator() { });
+            IAppMonitorCoordinator coordinator = new AppMonitorCoordinator() { };
+            coordinator.LoadData(configuration.SaveLocation); // Load the metric data from disk (in case it previously shut down)
+
+            serviceCollection.AddSingleton<IAppMonitorCoordinator>(coordinator);
             serviceCollection.AddSingleton<IAppMonitorConfig>(configuration);
 
             // Make sure SignalR is added as a service
