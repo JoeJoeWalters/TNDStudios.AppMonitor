@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace TNDStudios.AppMonitor.Core
 {
@@ -39,6 +39,11 @@ namespace TNDStudios.AppMonitor.Core
             serviceCollection.AddRouting();
 
             serviceCollection.AddHostedService<MetricMonitor>();
+
+            serviceCollection.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
 
             // Assign locally to be picked up by the UseAppMonitor method to create the serviceProvider implementation
             services = serviceCollection; 
@@ -77,18 +82,16 @@ namespace TNDStudios.AppMonitor.Core
             // Work that doesn't affect the response processing
             app.Use(async (context, next) =>
             {
-                if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
-                {
-                }
+                //if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
+                //{
+                //}
                 await next.Invoke();
 #warning TODO: Logging here! As it doesn't affect the response
             });
 
-            app.Run(async context =>
-            {
-                if (context.Request.Path.Value.Contains(configuration.ApiEndpoint))
+            app.Run(async context => {
                 {
-                    await context.Response.WriteAsync("You hit the api.");
+                    await middleware.ProcessRequest(context);
                 }
             });
 
