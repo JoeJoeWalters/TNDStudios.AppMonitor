@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TNDStudios.AppMonitor.Objects;
 
@@ -51,6 +53,11 @@ namespace TNDStudios.AppMonitor.Core
         /// Dictionary of applications that have been reported against by the clients
         /// </summary>
         private Dictionary<String, ReportingApplication> applications { get; set; }
+
+        /// <summary>
+        /// Filenames for metric data saved to the cache location
+        /// </summary>
+        private static String saveFileName = "metrics.json";
 
         /// <summary>
         /// Get a summary of the core service to return to the client so they can get 
@@ -125,6 +132,20 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns></returns>
         public Boolean LoadData(String loadDirectory)
         {
+            CheckSaveDirectory(loadDirectory);
+
+            String serialisedData = File.ReadAllText(Path.Combine(loadDirectory, saveFileName));
+            ReportingSummary reportingSummary = JsonConvert.DeserializeObject<ReportingSummary>(serialisedData);
+            if (reportingSummary != null)
+            {
+#warning TODO: POC for now, Do mapping with more complex summary later
+                applications = new Dictionary<String, ReportingApplication>();
+                reportingSummary.Applications.ForEach(app => 
+                {
+                    applications.Add(app.Name, app);
+                });
+            }
+
             return true;
         }
 
@@ -135,7 +156,18 @@ namespace TNDStudios.AppMonitor.Core
         /// <returns></returns>
         public Boolean SaveData(String saveDirectory)
         {
+            CheckSaveDirectory(saveDirectory);
+
+            String serialisedData = JsonConvert.SerializeObject(Summary());
+            File.WriteAllText(Path.Combine(saveDirectory, saveFileName), serialisedData);
+
             return true;
+        }
+
+        private void CheckSaveDirectory(String saveDirectory)
+        {
+            if (!Directory.Exists(saveDirectory))
+                Directory.CreateDirectory(saveDirectory);
         }
 
         /// <summary>

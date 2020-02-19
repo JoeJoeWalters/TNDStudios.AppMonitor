@@ -32,6 +32,7 @@ namespace TNDStudios.AppMonitor.Service
                 {
                     ApiEndpoint = "api/appmonitor",
                     SignalREndpoint = "signalr/appmonitor",
+                    SaveLocation = "c:/temp/appmonitor",
                     BackgroundTaskInterval = 60
                 });
         }
