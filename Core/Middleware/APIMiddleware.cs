@@ -17,6 +17,8 @@ namespace TNDStudios.AppMonitor.Core
     public class APIMiddleware
     {
         private const String summaryEndpoint = "/summary";
+        private const String metricEndpoint = "/metric";
+        private const String errorEndpoint = "/error";
 
         /// <summary>
         /// Injected items
@@ -47,6 +49,8 @@ namespace TNDStudios.AppMonitor.Core
             String path = context.Request.Path.Value.ToLower();
             if (path.Contains(config.ApiEndpoint.ToLower()))
             {
+                //String body = context.Request.Body;
+
                 // Decipher the endpoint 
                 if (path.EndsWith(summaryEndpoint))
                 {
@@ -56,6 +60,15 @@ namespace TNDStudios.AppMonitor.Core
                         writer.Write(JsonConvert.SerializeObject(coordinator.Summary()));
                     }
                     context.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+                else if (path.EndsWith(metricEndpoint))
+                {
+                    // Metric sent to the API (Rather than via SignalR transmission)
+                    // ReportingError error = 
+                }
+                else if (path.EndsWith(errorEndpoint))
+                {
+                    // Error sent to the API (Rather than via SignalR transmission)
                 }
                 else
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
