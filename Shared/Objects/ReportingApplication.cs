@@ -36,7 +36,7 @@ namespace TNDStudios.AppMonitor.Objects
         public ReportingApplication() : base()
         {
             Name = String.Empty;
-            Metrics = new Dictionary<String, ReportingMetrics>();
+            Metrics = new Dictionary<String, ReportingMetrics>() { { "Errors", new ReportingMetrics() } };
             Errors = new List<ReportingError>();
             NextRunTime = DateTime.MinValue;
         }

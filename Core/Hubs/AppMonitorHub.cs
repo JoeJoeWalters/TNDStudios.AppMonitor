@@ -52,6 +52,7 @@ namespace TNDStudios.AppMonitor.Core
 
             // Add the error to the memory error list for this application
             application.Errors.Add(new ReportingError() { Message = errorMessage });
+            application.AddMetric("Errors", 1); // Add an error to the default error metric
 
             // Tell all the clients a new error was received
             await Clients.All.SendAsync("ReceiveError", applicationName, errorMessage);
