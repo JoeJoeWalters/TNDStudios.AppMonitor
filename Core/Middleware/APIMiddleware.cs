@@ -49,29 +49,49 @@ namespace TNDStudios.AppMonitor.Core
             String path = context.Request.Path.Value.ToLower();
             if (path.Contains(config.ApiEndpoint.ToLower()))
             {
-                //String body = context.Request.Body;
+                try
+                {
+                    String body = String.Empty;
+                    using (StreamReader reader = new StreamReader(context.Request.Body))
+                        body = reader.ReadToEnd();
 
-                // Decipher the endpoint 
-                if (path.EndsWith(summaryEndpoint))
-                {
-                    // Get the summary to populate the UI etc.
-                    using (StreamWriter writer = new StreamWriter(context.Response.Body))
+                    // Decipher the endpoint 
+                    if (path.EndsWith(summaryEndpoint))
                     {
-                        writer.Write(JsonConvert.SerializeObject(coordinator.Summary()));
+                        // Get the summary to populate the UI etc.
+                        using (StreamWriter writer = new StreamWriter(context.Response.Body))
+                        {
+                            writer.Write(JsonConvert.SerializeObject(coordinator.Summary()));
+                        }
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
                     }
-                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    else if (path.EndsWith(metricEndpoint))
+                    {
+#warning TODO: This is not the right error object type, this is the storage, new objects needed specificially for the API Endpoints
+                        ReportingError error = JsonConvert.DeserializeObject<ReportingError>(body);
+                        if (error != null)
+                            throw new Exception("Error payload malformed");
+                        else
+                        {
+                            // Metric sent to the API (Rather than via SignalR transmission)
+                            coordinator.RegisteredHub.SendMetric("", "", 1).Wait();
+                        }
+                    }
+                    else if (path.EndsWith(errorEndpoint))
+                    {
+                        // Error sent to the API (Rather than via SignalR transmission)
+                        // Forward the error on to the hub to record the error and handle transmission
+                        // The hub will have been registered with the coordinator when it was instantiated
+                        coordinator.RegisteredHub.SendError("", "").Wait();
+                    }
+                    else
+                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 }
-                else if (path.EndsWith(metricEndpoint))
+                catch (Exception ex)
                 {
-                    // Metric sent to the API (Rather than via SignalR transmission)
-                    // ReportingError error = 
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    (new MemoryStream(Encoding.UTF8.GetBytes(ex.Message))).CopyTo(context.Response.Body);
                 }
-                else if (path.EndsWith(errorEndpoint))
-                {
-                    // Error sent to the API (Rather than via SignalR transmission)
-                }
-                else
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
 
             return Task.FromResult((successResponses.Contains((HttpStatusCode)context.Response.StatusCode)));

@@ -9,6 +9,8 @@ namespace TNDStudios.AppMonitor.Core
 {
     public interface IAppMonitorCoordinator
     {       
+        AppMonitorHub RegisteredHub { get; set; }
+
         /// <summary>
         /// Get a summary of the state of the system
         /// </summary>
@@ -44,6 +46,12 @@ namespace TNDStudios.AppMonitor.Core
 
     public class AppMonitorCoordinator : IAppMonitorCoordinator
     {
+        // The hub that is registered to this coordinator so that the API
+        // can access it. Currently the hub is set up by the SignalR startup
+        // and you cannot see the actual instance of it so we need to infer it when it is
+        // first hit
+        public AppMonitorHub RegisteredHub { get; set; }
+
         // Locking object for the dictionary rather than putting a lock on the dictionary itself
         // so we can dirty read the metrics without slowing down the app but creates and deletes
         // can be locked, we also don't want to lock array pushes to sub-items

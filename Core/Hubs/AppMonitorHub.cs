@@ -19,6 +19,7 @@ namespace TNDStudios.AppMonitor.Core
         public AppMonitorHub(IAppMonitorCoordinator coordinator)
         {
             this.coordinator = coordinator;
+            this.coordinator.RegisteredHub = this; // Register this hub with the coordinator
         }
 
         /// <summary>
