@@ -17,8 +17,8 @@ namespace TNDStudios.AppMonitor.Core
     public class APIMiddleware
     {
         private const String summaryEndpoint = "/summary";
-        private const String metricEndpoint = "/metric";
-        private const String errorEndpoint = "/error";
+        private const String metricEndpoint = "/metrics";
+        private const String errorEndpoint = "/errors";
 
         /// <summary>
         /// Injected items

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
 
-namespace TNDStudios.AppMonitor.Client
+namespace TNDStudios.AppMonitor.Service
 {
 
     public class MonitorClientRetryPolicy : IRetryPolicy

@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TNDStudios.AppMonitor.Client
+namespace TNDStudios.AppMonitor.Service
 {
     /// <summary>
     /// Client for .Net Core but written via Standard Library to handle trasmission of metrics,
